@@ -1,0 +1,33 @@
+// Link Colors
+@mixin link-colors($link-color, $hover-color) {
+    color: $link-color;
+
+    &:hover {
+        color: $hover-color;
+    }
+}
+
+// Media Query
+@mixin mq($bp) {
+    @media screen and (min-width: $bp) {
+        @content;
+    }
+}
+
+// Scrollbar
+@mixin scrollbar($size, $thumb-color, $track-color) {
+    &::-webkit-scrollbar {
+        background-color: $track-color;
+        height: $size;
+        width: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $thumb-color;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track-color;
+    }
+}
