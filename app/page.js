@@ -1,10 +1,13 @@
-import Image from 'next/image'
+import Feed from '@/components/Feed';
+import UploadModal from '@/components/UploadModal';
 
 export default function Home() {
+
   return (
-    <div className="py-24">
+    <div className="py-16">
       <div className="container">
-        <h1 className="text-2xl font-bold">Home Page</h1>
+        <Feed />
+        <UploadModal />
       </div>
     </div>
   )

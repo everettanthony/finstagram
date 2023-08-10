@@ -46,6 +46,46 @@ export const authOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         })
     ],
+    callbacks: {
+        async jwt({ token, user, session, trigger }) {
+            // update user
+            if (trigger === 'update' && session?.address) {
+                token.address = session.address;
+            }
+
+            // pass in user id and any new fields to token
+            if (user) {
+                return {
+                    ...token,
+                    id: user.id,
+                    address: user.address
+                }
+            }
+
+            // update the user in the mongodb database
+            const newUser = await prisma.user.update({
+                where: {
+                    id: token.id
+                },
+                data: {
+                    address: token.address
+                }
+            });
+
+            return token;
+        },
+        async session({ session, token, user }) {
+            // pass in user id and any new fields to session
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.id,
+                    address: token.address
+                }
+            }
+        }
+    },
     session: {
         strategy: 'jwt'
     },

@@ -1,12 +1,22 @@
 'use client';
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 
 export default function SignInPage() {
+    const session = useSession();
+    const router = useRouter();
     const [data, setData] = useState({
         email: '',
         password: ''
+    });
+
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            router.push('/dashboard') ;
+        }
     });
 
     async function loginUser(e) {
@@ -14,7 +24,16 @@ export default function SignInPage() {
 
         signIn('credentials', {
             ...data,
-            callbackUrl: '/dashboard'
+            redirect: false
+        })
+        .then((callback) => {
+            if (callback?.error) {
+                toast.error(callback.error);
+            }
+
+            if (callback?.ok && !callback?.error) {
+                toast.success(`You've signed in successfully.`);
+            }
         });
     }
 

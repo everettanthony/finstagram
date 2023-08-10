@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     experimental: {
-      appDir: true
+      appDir: true,
+      serverActions: true
     },
     images: {
-      domains: ['github.com', 'lh3.googleusercontent.com']
+      domains: ['github.com', 'lh3.googleusercontent.com', 'i.pravatar.cc']
     }
 }
   

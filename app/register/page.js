@@ -7,6 +7,7 @@ export default function RegisterPage() {
     const [data, setData] = useState({
         name: '',
         email: '',
+        address: '',
         password: ''
     });
 
@@ -58,6 +59,20 @@ export default function RegisterPage() {
                                 name="email" 
                                 value={data.email}
                                 onChange={(e) => setData({...data, email: e.target.value})}
+                                className="block w-full appearance-none rounded-md border bg-white
+                                    py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
+                                    text-gray-900 placeholder:text-gray-400 border-gray-300 
+                                    focus:border-gray-400 focus:outline-none sm:text-sm"
+                                required 
+                            />
+                        </div>
+                        <div className="space-y-2 mb-3">
+                            <label className="block font-bold mb-3">Address</label>
+                            <input 
+                                type="text" 
+                                name="address" 
+                                value={data.address}
+                                onChange={(e) => setData({...data, address: e.target.value})}
                                 className="block w-full appearance-none rounded-md border bg-white
                                     py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
                                     text-gray-900 placeholder:text-gray-400 border-gray-300 

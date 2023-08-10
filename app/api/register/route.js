@@ -6,11 +6,9 @@ const prisma = new PrismaClient();
 
 export async function POST(request) {
     const body = await request.json();
-    const { name, email, password } = body.data;
+    const { name, email, address, password } = body.data;
 
-    console.log(body.data);
-
-    if (!name || !email || !password) {
+    if (!name || !email || !address || !password) {
         return new NextResponse('You are missing either a name, email or password.', { status: 400 });
     }
 
@@ -30,6 +28,7 @@ export async function POST(request) {
         data: {
             name: name,
             email: email,
+            address: address,
             password: hashedPassword
         }
     });
