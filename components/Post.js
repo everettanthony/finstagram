@@ -26,8 +26,6 @@ export default function Post({ img, profileImg, caption, username, id }) {
     const [bookMarked, setBookMarked] = useState(false);
     const { data: session } = useSession();
 
-    console.log('session', session);
-
     useEffect(() => {
         const unsubscribe = onSnapshot(
           query(
@@ -120,19 +118,19 @@ export default function Post({ img, profileImg, caption, username, id }) {
                 </div>
             )}
 
-            <p className="p-5 truncate">
+            <div className="p-5 truncate">
                 {likes.length > 0 && (
                     <p className="font-bold mb-1">{likes.length} like{likes.length > 1 && 's'}</p>
                 )}
                 <span className="font-bold mr-2">{username}</span>
                 {caption}
-            </p>
+            </div>
 
             {comments.length > 0 && (
                 <div className="mx-8 max-h-24 overflow-y-scroll scrollbar-none">
-                    {comments.map((comment) => (
+                    {comments.map((comment, index) => (
                         <div
-                            key={comment.data().id}
+                            key={index}
                             className="flex items-center space-x-2 mb-2">
                             <img
                                 className="h-7  rounded-full object-cover"
@@ -143,6 +141,7 @@ export default function Post({ img, profileImg, caption, username, id }) {
                             <Moment fromNow>{comment.data().timestamp?.toDate()}</Moment>
                         </div>
                     ))}
+                    Comments
                 </div>
             )}
 

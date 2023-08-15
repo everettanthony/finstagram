@@ -1,29 +1,35 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { auth } from '@/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
 
-export default function RegisterPage() {
+// Sign up to site using Firebase email/password authentication
+export default function SignUpPage() {
     const router = useRouter();
     const [data, setData] = useState({
-        name: '',
         email: '',
-        address: '',
         password: ''
     });
 
-    async function registerUser(e) {
+    async function signUp(e) {
         e.preventDefault();
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({data})
-        });
-    
-        const userInfo = await response.json();
 
-        router.push('/signin');
+        createUserWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+            // Signed Up 
+            const userInfo = userCredential.user;
+            console.log('New User', `${userInfo}`);
+            toast.success(`You're all signed up.`);
+            router.push('/signin');
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('Error', `${errorCode}: ${errorMessage}`);
+            toast.error(`${errorCode}: ${errorMessage}`);
+        });
     }
 
     return (
@@ -32,26 +38,12 @@ export default function RegisterPage() {
                 <div className="relative mt-12 sm:mt-16">
                     <h1 className="text-center text-2xl font-medium 
                         tracking-tight text-gray-900">
-                        Register for an Account
+                        Sign Up for an Account
                     </h1>
                 </div>
                 <div className="sm:rounded-5xl -mx-4 mt-10 flex-auto bg-white px-4 py-10 
                     shadow-xl shadow-gray-900/10 sm:mx-0 sm:flex-none sm:p-20">
-                    <form onSubmit={registerUser} autoComplete="off">
-                        <div className="space-y-2 mb-3">
-                            <label className="block font-bold mb-3">Full Name</label>
-                            <input 
-                                type="text" 
-                                name="name" 
-                                value={data.name}
-                                onChange={(e) => setData({...data, name: e.target.value})}
-                                className="block w-full appearance-none rounded-md border bg-white
-                                    py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
-                                    text-gray-900 placeholder:text-gray-400 border-gray-300 
-                                    focus:border-gray-400 focus:outline-none sm:text-sm"
-                                required
-                            />
-                        </div>
+                    <form onSubmit={signUp} autoComplete="off">
                         <div className="space-y-2 mb-3">
                             <label className="block font-bold mb-3">Email</label>
                             <input 
@@ -63,21 +55,7 @@ export default function RegisterPage() {
                                     py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
                                     text-gray-900 placeholder:text-gray-400 border-gray-300 
                                     focus:border-gray-400 focus:outline-none sm:text-sm"
-                                required
-                            />
-                        </div>
-                        <div className="space-y-2 mb-3">
-                            <label className="block font-bold mb-3">Address</label>
-                            <input 
-                                type="text" 
-                                name="address" 
-                                value={data.address}
-                                onChange={(e) => setData({...data, address: e.target.value})}
-                                className="block w-full appearance-none rounded-md border bg-white
-                                    py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
-                                    text-gray-900 placeholder:text-gray-400 border-gray-300 
-                                    focus:border-gray-400 focus:outline-none sm:text-sm"
-                                required
+                                required 
                             />
                         </div>
                         <div className="space-y-2 mb-3">
@@ -91,7 +69,7 @@ export default function RegisterPage() {
                                     py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)]
                                     text-gray-900 placeholder:text-gray-400 border-gray-300 
                                     focus:border-gray-400 focus:outline-none sm:text-sm"
-                                required
+                                required 
                             />
                         </div>
                         <button 

@@ -15,7 +15,7 @@ export default function SignInPage() {
 
     useEffect(() => {
         if (session?.status === 'authenticated') {
-            router.push('/dashboard') ;
+            router.push('/dashboard');
         }
     });
 
